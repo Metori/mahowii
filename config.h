@@ -488,7 +488,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
   //#define OVERRIDE_LEDPIN_ON                  PORTC |= 1<<1;    // was PORTB |= (1<<5);
 
   #define OVERRIDE_BUZZERPIN_PINMODE          pinMode (A1, OUTPUT); // use A1 instead of d8
-  #define OVERRIDE_BUZZERPIN_ON               PORTF |= 1<<1 //PORTF |= 1;
+  #define OVERRIDE_BUZZERPIN_ON               PORTF |= 1<<1; //PORTF |= 1;
   #define OVERRIDE_BUZZERPIN_OFF              PORTF &= ~(1<<1); //PORTF &= ~1;
 
 /*************************************************************************************************/
@@ -799,7 +799,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 
 	// (EEPROM) If FENCE DISTANCE is larger than 0 then copter will switch to RTH when it farther from home
 	//than the defined number in meters
-	//#define FENCE_DISTANCE      300
+	#define FENCE_DISTANCE      0
 
 	// Only allow FC arming if GPS has a 3D fix and number of satellites >= 6
 	//#define ONLY_ALLOW_ARM_WITH_GPS_3DFIX

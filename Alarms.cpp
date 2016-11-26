@@ -100,6 +100,10 @@ void alarmHandler(void){
     else alarmArray[ALRM_FAC_RUNTIME] = ALRM_LVL_OFF;
   #endif
   
+  #if defined(VBAT) && defined(VBAT_ALAND) && !GPS
+  #error "Unfortunatly GPS is needed for using VBAT_ALAND"
+  #endif
+  
   #if defined(VBAT)
     if (vbatMin < conf.vbatlevel_crit) alarmArray[ALRM_FAC_VBAT] = ALRM_LVL_VBAT_CRIT;
     else if ( (analog.vbat > conf.vbatlevel_warn1)  || (NO_VBAT > analog.vbat)) alarmArray[ALRM_FAC_VBAT] = ALRM_LVL_OFF;

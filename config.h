@@ -65,11 +65,11 @@
     //#define MINTHROTTLE 1120 // for Super Simple ESCs 10A
     //#define MINTHROTTLE 1064 // special ESC (simonk)
     //#define MINTHROTTLE 1050 // for brushed ESCs like ladybird
-    #define MINTHROTTLE 1100 // (*) (**)
+    #define MINTHROTTLE 1120 // (*) (**)
 
   /****************************    Motor maxthrottle    *******************************/
     /* this is the maximum value for the ESCs at full power, this value can be increased up to 2000 */
-    #define MAXTHROTTLE 1900
+    #define MAXTHROTTLE 2000
 
   /****************************    Mincommand          *******************************/
     /* this is the value for the ESCs when they are not armed
@@ -235,7 +235,7 @@
    /********************************    ARM/DISARM    *********************************/
    /* optionally disable stick combinations to arm/disarm the motors.
      * In most cases one of the two options to arm/disarm via TX stick is sufficient */
-    #define ALLOW_ARM_DISARM_VIA_TX_YAW
+    //#define ALLOW_ARM_DISARM_VIA_TX_YAW
     //#define ALLOW_ARM_DISARM_VIA_TX_ROLL
 
     /********************************    SERVOS      *********************************/
@@ -487,13 +487,9 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
   //#define OVERRIDE_LEDPIN_OFF                 PORTC &= ~(1<<1); // PORTB &= ~(1<<5);
   //#define OVERRIDE_LEDPIN_ON                  PORTC |= 1<<1;    // was PORTB |= (1<<5);
 
-  //#define OVERRIDE_BUZZERPIN_PINMODE          pinMode (46, OUTPUT); // CAMTRIG
-  //#define OVERRIDE_BUZZERPIN_ON               PORTL |= 1<<3; //PORTL |= 1;
-  //#define OVERRIDE_BUZZERPIN_OFF              PORTL &= ~(1<<3); //PORTL &= ~1;
-
-  //#define OVERRIDE_BUZZERPIN_PINMODE          pinMode (A2, OUTPUT); // use A2 instead of d8
-  //#define OVERRIDE_BUZZERPIN_ON               PORTC |= 1<<2; //PORTB |= 1;
-  //#define OVERRIDE_BUZZERPIN_OFF              PORTC &= ~(1<<2); //PORTB &= ~1;
+  #define OVERRIDE_BUZZERPIN_PINMODE          pinMode (A1, OUTPUT); // use A1 instead of d8
+  #define OVERRIDE_BUZZERPIN_ON               PORTF |= 1<<1 //PORTF |= 1;
+  #define OVERRIDE_BUZZERPIN_OFF              PORTF &= ~(1<<1); //PORTF &= ~1;
 
 /*************************************************************************************************/
 /*****************                                                                 ***************/
@@ -523,15 +519,10 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
          balancing options ran out. Uncomment only one option!
          IMPORTANT! Change low pass filter setting changes PID behaviour, so retune your PID's after changing LPF.
          available for ITG3050, ITG3200, MPU3050, MPU6050*/
-      
-	#ifdef KILL_VIBRO
-	    #define GYRO_LPF_20HZ
-	#else
       //#define GYRO_LPF_98HZ
-      //#define GYRO_LPF_42HZ
-      #define GYRO_LPF_20HZ		// This is the default setting
+      #define GYRO_LPF_42HZ
+      //#define GYRO_LPF_20HZ		// This is the default setting
       //#define GYRO_LPF_10HZ   // Use this only in extreme cases, rather change motors and/or props -- setting not available on ITG3200
-	#endif
 
     /******                Gyro smoothing    **********************************/
       /* GYRO_SMOOTHING. In case you cannot reduce vibrations _and_ _after_ you have tried the low pass filter options, you
@@ -561,7 +552,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
    * Note: theoretically it increases D-part for 20-30% and you will need to increase acro P coef. accordingly.
    * E.g. P roll/pitch was 5.2 and should be changed to 6-6.5
    */
-  #define KILL_SMALL_OSCILLATIONS
+  //#define KILL_SMALL_OSCILLATIONS
 
   /************************        Angele throttle correction         ********************/
   /* Automatically increase throttle based on the angle of the copter
@@ -570,8 +561,8 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
   //#define THROTTLE_ANGLE_CORRECTION 40
 
   /*** HEADFREE : the copter can be controled by an absolute stick orientation, whatever the yaw orientation ***/
-  #define HEADFREE
-
+  //#define HEADFREE
+  
  /*************************        Advanced Headfree Mode             ********************/
  /* In Advanced Headfree mode when the copter is farther than ADV_HEADFREE_RANGE meters then
     the  bearing between home and copter position will become the control direction
@@ -612,6 +603,10 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 
     #define FAILSAFE_DETECT_TRESHOLD  985
 
+    /*   GPS NAV based failsafe options.   Only use if you have GPS navigation enabled    */
+    #define FAILSAFE_LAND  //Failsafe will perform a NAV land instead of throttle cut
+    #define FAILSAFE_RTH   //Failsafe will Return To Home, if FAILSAFE_LAND is also enabled, it will autoland once at home
+    #define FAILSAFE_IGNORE_LAND //Failsafe will be ignored if land is already in progress
 
   /*****************                DFRobot LED RING    *********************************/
     /* I2C DFRobot LED RING communication */
@@ -619,14 +614,14 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 
   /********************************    LED FLASHER    ***********************************/
     //#define LED_FLASHER
-    //#define LED_FLASHER_DDR DDRB
-    //#define LED_FLASHER_PORT PORTB
-    //#define LED_FLASHER_BIT PORTB4
+    //#define LED_FLASHER_DDR DDRC
+    //#define LED_FLASHER_PORT PORTC
+    //#define LED_FLASHER_BIT PORTC5
     //#define LED_FLASHER_INVERT
     //#define LED_FLASHER_SEQUENCE        0b00000000      // leds OFF
-    //#define LED_FLASHER_SEQUENCE_ARMED  0b00000101      // create double flashes
+    //#define LED_FLASHER_SEQUENCE_ARMED  0b00000001
     //#define LED_FLASHER_SEQUENCE_MAX    0b11111111      // full illumination
-    //#define LED_FLASHER_SEQUENCE_LOW    0b00000000      // no illumination
+    //#define LED_FLASHER_SEQUENCE_LOW    0b00000001      // blinking
 
 
   /*******************************    Landing lights    *********************************/
@@ -651,7 +646,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 
   /*******************************    OSD Switch    *************************************/
     // This adds a box that can be interpreted by OSD in activation status (to switch on/off the overlay for instance)
-  //#define OSD_SWITCH
+  #define OSD_SWITCH
 
   /**************************************************************************************/
   /***********************                  TX-related         **************************/
@@ -659,7 +654,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 
     /* introduce a deadband around the stick center
        Must be greater than zero, comment if you dont want a deadband on roll, pitch and yaw */
-    #define DEADBAND 20
+    #define DEADBAND 4
 
   /**************************************************************************************/
   /***********************                  GPS                **************************/
@@ -679,9 +674,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 	// note: Now a GPS can share MSP on the same port. The only constrain is to not use it simultaneously, and use the same port speed.
 
 	// avoid using 115200 baud because with 16MHz arduino the 115200 baudrate have more than 2% speed error (57600 have 0.8% error)
-	//#define GPS_BAUD	115200       // GPS_BAUD will override SERIALx_COM_SPEED for the selected port
-	//#define GPS_BAUD	57600
-	#define GPS_BAUD	38400
+    #define GPS_BAUD   57600       // GPS_BAUD will override SERIALx_COM_SPEED for the selected port
 
 	/* GPS protocol
 	 NMEA  - Standard NMEA protocol GGA, GSA and RMC  sentences are needed
@@ -694,13 +687,9 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 	#define UBLOX
 	//#define MTK_BINARY16
 	//#define MTK_BINARY19
-	#define INIT_MTK_GPS        // initialize MTK GPS for using selected speed, 5Hz update rate and GGA & RMC sentence or binary settings
-	//#define VENUS8
+        //#define INIT_MTK_GPS        // initialize MTK GPS for using selected speed, 5Hz update rate and GGA & RMC sentence or binary settings
 
-	#define GPS_NMEA_UPDATE_RATE_5HZ    	// 5 Hz update rate
-	//#define GPS_NMEA_UPDATE_RATE_10HZ     // 10 Hz update rate
-
-	#define SET_SBAS_ENABLED              	// Enable to search a SBAS satellite or not.
+	//#define SET_SBAS_ENABLED              	// Enable to search a SBAS satellite or not.
 	//#define SET_SBAS_TEST_MODE
 
 	//#define MTK3339_AIC_ENABLED   // It enables AIC mode for MTK3339 module. The GPS signal could be recovered from jammed signal, and let user get better navigation quality.
@@ -711,15 +700,15 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 	//#define UBLOX_GNSS_GPS_SBAS_GLONASS     // set GNSS to GPS + SBAS + GLONASS
     
 	//#define UBLOX_NAV5_PEDESTRIAN_MODEL	// Collected by resetting a GPS unit to defaults. Changing mode to Pedistrian and capturing the data from the U-Center binary console.
-	#define UBLOX_NAV5_AIRBORNE_1G_MODEL	// Airborne <1G model
+	//#define UBLOX_NAV5_AIRBORNE_1G_MODEL	// Airborne <1G model
 	//#define UBLOX_NAV5_AIRBORNE_4G_MODEL	// Airborne <4G model
 
 	//#define UBLOX_SBAS_NONE		// set SBAS to NONE
-	#define UBLOX_SBAS_AUTO		// set SBAS to AUTO
+	//#define UBLOX_SBAS_AUTO		// set SBAS to AUTO
 	//#define UBLOX_SBAS_EGNOS	// set SBAS to EGNOS for EUROPE
 	//#define UBLOX_SBAS_WAAS		// set SBAS to WAAS for USA/Canada
 
-	#define UBLOX_UPDATE_RATE_5HZ    	// 5 Hz update rate
+	//#define UBLOX_UPDATE_RATE_5HZ    	// 5 Hz update rate
 	//#define UBLOX_UPDATE_RATE_10HZ     // 10 Hz update rate
 
 	/* I2C GPS device made with an independant arduino + GPS device
@@ -761,7 +750,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 	 Convert the degree+minutes into decimal degree by ==> degree+minutes*(1/60)
 	 Note the sign on declination it could be negative or positive (WEST or EAST)
 	 Also note, that maqgnetic declination changes with time, so recheck your value every 3-6 months */
-	  #define MAG_DECLINATION  -14.72f        // For MONTREAL QUEBEC
+	  #define MAG_DECLINATION  -10.07f        // For Vladivostok
     //#define MAG_DECLINATION  10.8f        // For Moscow
     //#define MAG_DECLINATION  5.0f        // For Krakow
 
@@ -777,21 +766,21 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 
 	// (EEPROM) Safe WP distance, do not start mission if the first wp distance is larger than this number (in meters)
 	// Also aborts mission if the next waypoint distance is more than this number
-	#define SAFE_WP_DISTANCE           200      //(**)
+	#define SAFE_WP_DISTANCE           500      //(**)
 
 	// (EEPROM) minimum speed when approach waypoint
-	#define NAV_SPEED_MIN              100    // cm/sec //(**)
+	#define NAV_SPEED_MIN              200    // cm/sec //(**)
 	// (EEPROM) maximum speed to reach between waypoints
-	#define NAV_SPEED_MAX              400    // cm/sec //(**)
+	#define NAV_SPEED_MAX              800    // cm/sec //(**)
 	// (EEPROM) Slow down to zero when reaching waypoint (same as NAV_SPEED_MIN = 0)
 	#define NAV_SLOW_NAV               0      //(**)
 	// (EEPROM) Weight factor of the crosstrack error in navigation calculations (do not touch)
 	#define CROSSTRACK_GAIN            .4     //(**)
 	// (EEPROM) Maximum allowable banking than navigation outputs
-	#define NAV_BANK_MAX			   3000	// =30 degrees
+	#define NAV_BANK_MAX		   3000	// =30 degrees (**)
 
 	// (EEPROM) Maximum allowable navigation altitude (in meters) automatic altitude control will not go above this height
-	#define MAX_NAV_ALTITUDE           50     //(**)
+	#define MAX_NAV_ALTITUDE           80     //(**)
 	// (EEPROM) Defines the RTH altitude. 0 means keep current alt during RTH (in meters)
 	#define RTH_ALTITUDE               25        //(**)
 	// (EEPROM) Wait to reach RTH/WP alt before start moving to home/next WP (0-no, 1-yes)
@@ -810,10 +799,10 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 
 	// (EEPROM) If FENCE DISTANCE is larger than 0 then copter will switch to RTH when it farther from home
 	//than the defined number in meters
-	#define FENCE_DISTANCE      300
+	//#define FENCE_DISTANCE      300
 
 	// Only allow FC arming if GPS has a 3D fix and number of satellites >= 6
-	#define ONLY_ALLOW_ARM_WITH_GPS_3DFIX
+	//#define ONLY_ALLOW_ARM_WITH_GPS_3DFIX
 
 
 	/**************************************************************************************/
@@ -980,14 +969,17 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
        with R1=33k and R2=51k
        vbat = [0;1023]*16/VBATSCALE
        must be associated with #define BUZZER ! */
-    //#define VBAT              // uncomment this line to activate the vbat code
-    #define VBATSCALE       131 // (*) (**) change this value if readed Battery voltage is different than real voltage
+    #define VBAT              // uncomment this line to activate the vbat code
+    #define VBATSCALE       119 // (*) (**) change this value if readed Battery voltage is different than real voltage
     #define VBATNOMINAL     126 // 12,6V full battery nominal voltage - only used for lcd.telemetry
-    #define VBATLEVEL_WARN1 107 // (*) (**) 10,7V
-    #define VBATLEVEL_WARN2  99 // (*) (**) 9.9V
-    #define VBATLEVEL_CRIT   93 // (*) (**) 9.3V - critical condition: if vbat ever goes below this value, permanent alarm is triggered
+    #define VBATLEVEL_WARN1 108 // (*) (**) 10,8V
+    #define VBATLEVEL_WARN2 102 // (*) (**) 10.2V
+    #define VBATLEVEL_CRIT   99 // (*) (**) 9.9V - critical condition: if vbat ever goes below this value, permanent alarm is triggered
     #define NO_VBAT          16 // Avoid beeping without any battery
     #define VBAT_OFFSET       0 // offset in 0.1Volts, gets added to voltage value  - useful for zener diodes
+
+    //#define VBAT_ALAND          // When battery reaches VBATLEVEL_WARN2 copter will autoland
+    #define VBAT_ALAND_CNT    3 // Number of VBATLEVEL_WARN2 heared before autoland will be activated
 
     /* for V BAT monitoring of individual cells
      * enable both VBAT and VBAT_CELLS
@@ -1009,10 +1001,10 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
        1 - hard: - (uses hardware sensor, after configuration gives very good results)
        2 - soft: - (good results +-5% for plush and mystery ESCs @ 2S and 3S, not good with SuperSimple ESC)    */
     //#define POWERMETER_SOFT
-    //#define POWERMETER_HARD
-    #define PSENSORNULL 510 /* (*) hard only: set to analogRead() value for zero current; for I=0A my sensor
+    #define POWERMETER_HARD
+    #define PSENSORNULL 57 /* (*) hard only: set to analogRead() value for zero current; for I=0A my sensor
                                    gives 1/2 Vss; that is approx 2.49Volt; */
-    #define PINT2mA 132     /* (*) hard: one integer step on arduino analog translates to mA (example 4.9 / 37 * 1000) ;
+    #define PINT2mA 81     /* (*) hard: one integer step on arduino analog translates to mA (example 4.9 / 37 * 1000) ;
                                    soft: use fictional value, start with 100.
                                    for hard and soft: larger PINT2mA will get you larger value for power (mAh equivalent) */
     //#define WATTS // compute and display the actual watts (=Volt*Ampere) consumed - requires both POWERMETER_HARD and VBAT
@@ -1047,7 +1039,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
      * I.e. pls. use GUI to set MID point of throttle expo as initial/hovering throttle.
      * If it's activated, specified hovering throttle value will be taken from this define.
      */
-    #define HOVERING_THROTTLE 		1500
+    //#define HOVERING_THROTTLE 		1500
 
 
   /********************************************************************/
@@ -1080,11 +1072,11 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
      * It must be 16 characters total,
      * The last 4 characters will be overwritten with the version number.
      */
-    #define BOARD_NAME "MultiWii   V-.--"
+    #define BOARD_NAME "MetoriWii   V-.--"
     //                  123456789.123456
 
   /*************      Support multiple configuration profiles in EEPROM     ************/
-    #define MULTIPLE_CONFIGURATION_PROFILES
+    //#define MULTIPLE_CONFIGURATION_PROFILES
 
   /*************      do no reset constants when change of flashed program is detected ***********/
     #define NO_FLASH_CHECK
@@ -1124,7 +1116,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
     //#define MOTOR_STOP
 
     /* some radios have not a neutral point centered on 1500. can be changed here */
-    #define MIDRC 1500
+    #define MIDRC 1520
 
   /***********************         Servo Refreshrates            ***********************/
     /* Default 50Hz Servo refresh rate*/
@@ -1245,8 +1237,8 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
        Warning: this creates a special version of MultiWii Code
        You cannot fly with this special version. It is only to be used for calibrating ESCs
        Read How To at http://code.google.com/p/multiwii/wiki/ESCsCalibration */
-    #define ESC_CALIB_LOW     (MINTHROTTLE-100)
-    #define ESC_CALIB_HIGH    MAXTHROTTLE
+    #define ESC_CALIB_LOW  MINCOMMAND
+    #define ESC_CALIB_HIGH 2000
     //#define ESC_CALIB_CANNOT_FLY  // uncomment to activate
 
   /****           internal frequencies                             ****/

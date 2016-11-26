@@ -174,6 +174,11 @@ int16_t  magHold,headFreeModeHold; // [-180;+180]
 uint8_t  vbatMin = VBATNOMINAL;  // lowest battery voltage in 0.1V steps
 uint8_t  rcOptions[CHECKBOXITEMS];
 
+#if defined(VBAT) && defined(VBAT_ALAND)
+  uint8_t  BatAlarm_Land = 0;
+  int16_t  vbatland_count = 0;
+#endif
+
 // **************
 // gyro+acc IMU
 // **************
@@ -276,6 +281,17 @@ uint16_t intPowerTrigger1;
 
 int16_t failsafeEvents = 0;
 volatile int16_t failsafeCnt = 0;
+
+#if defined(FAILSAFE_LAND) || defined(FAILSAFE_RTH)  //Create a NAV based failsafe flag
+	bool failsafe_nav = true;
+#else
+	bool failsafe_nav = false;
+#endif
+#if defined(FAILSAFE_IGNORE_LAND) //Create a flag for FAILSAFE_IGNORE_LAND
+	bool failsafe_ignore = true;
+#else
+	bool failsafe_ignore = false;
+#endif
 
 int16_t rcData[RC_CHANS];    // interval [1000;2000]
 int16_t rcSerial[8];         // interval [1000;2000] - is rcData coming from MSP
@@ -479,9 +495,11 @@ void annexCode() { // this code is executed at each loop and won't interfere wit
   case 1:
   {
     #if defined(VBAT) && !defined(VBAT_CELLS)
+      analogReference(INTERNAL1V1);
       static uint8_t ind = 0;
       static uint16_t vvec[VBAT_SMOOTH], vsum;
       uint16_t v = analogRead(V_BATPIN);
+      debug[0] = v;
       #if VBAT_SMOOTH == 1
         analog.vbat = (v*VBAT_PRESCALER) / conf.vbatscale + VBAT_OFFSET; // result is Vbatt in 0.1V steps
       #else
@@ -497,6 +515,7 @@ void annexCode() { // this code is executed at each loop and won't interfere wit
           analog.vbat = ((vsum /VBAT_SMOOTH) * VBAT_PRESCALER) / conf.vbatscale + VBAT_OFFSET; // result is Vbatt in 0.1V steps
         #endif
       #endif
+      analogReference(DEFAULT);
     #endif // VBAT
     break;
   }
@@ -646,6 +665,19 @@ void annexCode() { // this code is executed at each loop and won't interfere wit
     #endif
     #if defined(VBAT)
       if ( (analog.vbat > NO_VBAT) && (analog.vbat < vbatMin) ) vbatMin = analog.vbat;
+      #if defined (VBAT_ALAND)
+        if (analog.vbat < conf.vbatlevel_warn2) // don't allow to fly if bat is bad
+        {
+          f.ARMED = 0;
+          if (alarmArray[1] == 0)
+            alarmArray[1] = 1;
+          else if (alarmArray[1] == 1)
+            alarmArray[1] = 0;
+        }
+        else {
+          vbatland_count = 0;
+        }
+      #endif
     #endif
     #ifdef LCD_TELEMETRY
       #if BARO
@@ -811,6 +843,18 @@ void go_arm() {
       magHold = att.heading;
       #if defined(VBAT)
         if (analog.vbat > NO_VBAT) vbatMin = analog.vbat;
+        #if defined(VBAT_ALAND)
+          if (analog.vbat < conf.vbatlevel_warn2) { //don't allow to arm if battery is bad
+            f.ARMED = 0;
+            if (alarmArray[1] == 0)
+              alarmArray[1] = 1;
+            else if (alarmArray[1] == 1)
+              alarmArray[1] = 0;
+          }
+          else {
+            vbatland_count = 0;
+          }
+        #endif
       #endif
 /*
       #ifdef ALTITUDE_RESET_ON_ARM
@@ -914,6 +958,7 @@ void loop () {
     computeRC();
     // Failsafe routine - added by MIS
     #if defined(FAILSAFE)
+      if (GPS_numSat <5 || !f.GPS_FIX || !failsafe_nav){
       if ( failsafeCnt > (5*FAILSAFE_DELAY) && f.ARMED) {                  // Stabilize, and set Throttle to specified level
         for(i=0; i<3; i++) rcData[i] = MIDRC;                               // after specified guard time after RC signal is lost (in 0.1sec)
         rcData[THROTTLE] = conf.failsafe_throttle;
@@ -928,6 +973,7 @@ void loop () {
           f.OK_TO_ARM = 0; // to restart accidentely by just reconnect to the tx - you will have to switch off first to rearm
       }
       failsafeCnt++;
+      }
     #endif
     // end of failsafe routine - next change is made with RcOptions setting
 
@@ -1200,6 +1246,34 @@ void loop () {
     // unlike other parts of the multiwii code, it looks for changes and not based on flag settings
     // by this method a priority can be established between gps option
 
+	//NAV based failsafe
+    #if defined(FAILSAFE) && (defined(FAILSAFE_RTH) || defined(FAILSAFE_LAND))   //Check if failsafe option is enabled and if either failsafe_rth or failsafe_land options are enabled
+      if (f.GPS_FIX && GPS_numSat >=5){
+        if ( failsafeCnt > (5*FAILSAFE_DELAY) && f.ARMED){ //Test for failsafe condition
+        for(i=0; i<3; i++) rcData[i] = MIDRC;                               // after specified guard time after RC signal is lost (in 0.1sec)
+	  if (!((NAV_state == NAV_STATE_LAND_IN_PROGRESS || NAV_state == NAV_STATE_LANDED) && failsafe_ignore)){		//if FAILSAFE_IGNORE_LAND is enabled, only switch to rth/land if land is not in progress
+	    rcOptions[BOXLAND]=false;        //Disable land/home/hold gps boxes so they dont interfere with the failsafe
+            rcOptions[BOXGPSHOME]=false;
+	    rcOptions[BOXGPSHOLD]=false;
+	    #if defined(FAILSAFE_RTH)
+	      rcOptions[BOXGPSHOME]=true; //manually enable RTH gps box
+	    #endif
+	    #if defined(FAILSAFE_LAND)
+	      rcOptions[BOXLAND]=true; //manually enable LAND gps box
+              failsafe_ignore=false; //disable failsafe_ignore flag to prevent rth/land from constant resetting
+            #endif
+	   }
+          failsafeCnt=(5*FAILSAFE_DELAY); //Always keep failsafe count at the engage time to prevent disarm on short GPS fix drop
+        }
+        else{ 
+          #if defined(FAILSAFE_IGNORE_LAND)
+            failsafe_ignore=true;          //Reset failsafe_ignore flag once failsafe condition is releived only if FAILSAFE_IGNORE_LAND is defined
+          #endif
+        }
+        failsafeCnt++;  //increment failsafe counter
+      }
+    #endif
+
 	// safe baro mode control in GPS modes, i.e. possible to switch off GPS_BARO_MODE at any time, e.g. when numSat < 4
     if(!rcOptions[BOXGPSHOME] && !rcOptions[BOXLAND] && !rcOptions[BOXGPSNAV]) {
 		if(f.GPS_BARO_MODE) {
@@ -1208,6 +1282,25 @@ void loop () {
 	}
 
     if (f.ARMED) {                       //Check GPS status and armed
+
+#if defined(VBAT) && defined(VBAT_ALAND)
+        if (analog.vbat <= conf.vbatlevel_warn2 && BatAlarm_Land == 0) { // If battery reaches WARN2 then start process
+          vbatland_count++;
+          if (vbatland_count >= 60 * VBAT_ALAND_CNT) { //compare counter with value choosen in config.h
+            f.VBAT_AUTOLAND = 1;
+            BatAlarm_Land = 1;
+          }
+        }
+        if (f.VBAT_AUTOLAND == 1) { // Start landing
+          vbatland_count = 0;
+          f.GPS_mode = GPS_MODE_HOLD;
+          f.GPS_BARO_MODE = true;
+          GPS_set_next_wp(&GPS_coord[LAT], &GPS_coord[LON], &GPS_coord[LAT], &GPS_coord[LON]);
+          set_new_altitude(alt.EstAlt);
+          NAV_state = NAV_STATE_LAND_START;
+          f.VBAT_AUTOLAND = 0;
+        }
+      #endif
 
 		if (f.GPS_FIX) {
 

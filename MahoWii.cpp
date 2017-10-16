@@ -471,12 +471,13 @@ void annexCode() { // this code is executed at each loop and won't interfere wit
   case 0:
   {
     #if defined(POWERMETER_HARD)
+      analogReference(INTERNAL1V1);
       static uint32_t lastRead = currentTime;
       static uint8_t ind = 0;
       static uint16_t pvec[PSENSOR_SMOOTH], psum;
       uint16_t p =  analogRead(PSENSORPIN);
       //LCDprintInt16(p); LCDcrlf();
-      //debug[0] = p;
+      debug[1] = p;
       #if PSENSOR_SMOOTH != 1
         psum += p;
         psum -= pvec[ind];
@@ -488,6 +489,7 @@ void annexCode() { // this code is executed at each loop and won't interfere wit
       analog.amperage = ((uint32_t)powerValue * conf.pint2ma) / 100; // [100mA]    //old (will overflow for 65A: powerValue * conf.pint2ma; // [1mA]
       pMeter[PMOTOR_SUM] += ((currentTime-lastRead) * (uint32_t)((uint32_t)powerValue*conf.pint2ma))/100000; // [10 mA * msec]
       lastRead = currentTime;
+      analogReference(DEFAULT);
     #endif // POWERMETER_HARD
     break;
   }

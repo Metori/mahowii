@@ -362,7 +362,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
       /* The following lines apply only for specific receiver with only one PPM sum signal, on digital PIN 2
          Select the right line depending on your radio brand. Feel free to modify the order in your PPM order is different */
       //#define SERIAL_SUM_PPM         PITCH,YAW,THROTTLE,ROLL,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For Graupner/Spektrum
-      #define SERIAL_SUM_PPM         ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For Robe/Hitec/Futaba
+      //#define SERIAL_SUM_PPM         ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4,AUX5,9,10,11 //For Robe/Hitec/Futaba
       //#define SERIAL_SUM_PPM         ROLL,PITCH,YAW,THROTTLE,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For Multiplex
       //#define SERIAL_SUM_PPM         PITCH,ROLL,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For some Hitec/Sanwa/Others
       //#define SERIAL_SUM_PPM         THROTTLE,YAW,ROLL,PITCH,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //Modelcraft
@@ -478,9 +478,9 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 
   /* only enable any of this if you must change the default pin assignment, e.g. your board does not have a specific pin */
   /* you may need to change PINx and PORTx plus #shift according to the desired pin! */
-  //#define OVERRIDE_V_BATPIN                   A0 // instead of A3    // Analog PIN 3
+  #define OVERRIDE_V_BATPIN                   A0 // instead of A3    // Analog PIN 3
 
-  //#define OVERRIDE_PSENSORPIN                 A1 // instead of A2    // Analog PIN 2
+  //#define OVERRIDE_PSENSORPIN                 A2 // instead of A2    // Analog PIN 2
 
   //#define OVERRIDE_LEDPIN_PINMODE             pinMode (A1, OUTPUT); // use A1 instead of d13
   //#define OVERRIDE_LEDPIN_TOGGLE              PINC |= 1<<1; // PINB |= 1<<5;     //switch LEDPIN state (digital PIN 13)
@@ -520,8 +520,8 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
          IMPORTANT! Change low pass filter setting changes PID behaviour, so retune your PID's after changing LPF.
          available for ITG3050, ITG3200, MPU3050, MPU6050*/
       //#define GYRO_LPF_98HZ
-      #define GYRO_LPF_42HZ
-      //#define GYRO_LPF_20HZ		// This is the default setting
+      //#define GYRO_LPF_42HZ
+      #define GYRO_LPF_20HZ		// This is the default setting
       //#define GYRO_LPF_10HZ   // Use this only in extreme cases, rather change motors and/or props -- setting not available on ITG3200
 
     /******                Gyro smoothing    **********************************/
@@ -596,7 +596,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
        PITCH, ROLL and YAW is centered and THROTTLE is set to FAILSAFE_THROTTLE value. You must set this value to descending about 1m/s or so
        for best results. This value is depended from your configuration, AUW and some other params.  Next, after FAILSAFE_OFF_DELAY the copter is disarmed,
        and motors is stopped. If RC pulse coming back before reached FAILSAFE_OFF_DELAY time, after the small quard time the RC control is returned to normal. */
-    //#define FAILSAFE                                // uncomment  to activate the failsafe function
+    #define FAILSAFE                                // uncomment  to activate the failsafe function
     #define FAILSAFE_DELAY     10                     // Guard time for failsafe activation after signal lost. 1 step = 0.1sec - 1sec in example
     #define FAILSAFE_OFF_DELAY 200                    // Time for Landing before motors stop in 0.1sec. 1 step = 0.1sec - 20sec in example
     #define FAILSAFE_THROTTLE  (MINTHROTTLE + 200)    // (*) Throttle level used for landing - may be relative to MINTHROTTLE - as in this case
@@ -750,7 +750,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 	 Convert the degree+minutes into decimal degree by ==> degree+minutes*(1/60)
 	 Note the sign on declination it could be negative or positive (WEST or EAST)
 	 Also note, that maqgnetic declination changes with time, so recheck your value every 3-6 months */
-	  #define MAG_DECLINATION  -10.07f        // For Vladivostok
+	  #define MAG_DECLINATION  -10.37f        // For Vladivostok
     //#define MAG_DECLINATION  10.8f        // For Moscow
     //#define MAG_DECLINATION  5.0f        // For Krakow
 
@@ -771,7 +771,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 	// (EEPROM) minimum speed when approach waypoint
 	#define NAV_SPEED_MIN              200    // cm/sec //(**)
 	// (EEPROM) maximum speed to reach between waypoints
-	#define NAV_SPEED_MAX              800    // cm/sec //(**)
+	#define NAV_SPEED_MAX              600    // cm/sec //(**)
 	// (EEPROM) Slow down to zero when reaching waypoint (same as NAV_SPEED_MIN = 0)
 	#define NAV_SLOW_NAV               0      //(**)
 	// (EEPROM) Weight factor of the crosstrack error in navigation calculations (do not touch)
@@ -922,8 +922,8 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
   /********************************************************************/
   /****                             RSSI                           ****/
   /********************************************************************/
-    //#define RX_RSSI
-    //#define RX_RSSI_PIN A3
+    #define RX_RSSI
+    #define RX_RSSI_PIN A3
     //#define RX_RSSI_CHAN 8   //RSSI injection on selected channel (for PPM, Olrs, SBUS, etc.) (Starts at 0)
 
   /********************************************************************/
@@ -1000,11 +1000,11 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
        Two options:
        1 - hard: - (uses hardware sensor, after configuration gives very good results)
        2 - soft: - (good results +-5% for plush and mystery ESCs @ 2S and 3S, not good with SuperSimple ESC)    */
-    //#define POWERMETER_SOFT
-    #define POWERMETER_HARD
+    #define POWERMETER_SOFT
+    //#define POWERMETER_HARD
     #define PSENSORNULL 57 /* (*) hard only: set to analogRead() value for zero current; for I=0A my sensor
                                    gives 1/2 Vss; that is approx 2.49Volt; */
-    #define PINT2mA 81     /* (*) hard: one integer step on arduino analog translates to mA (example 4.9 / 37 * 1000) ;
+    #define PINT2mA 100     /* (*) hard: one integer step on arduino analog translates to mA (example 4.9 / 37 * 1000) ;
                                    soft: use fictional value, start with 100.
                                    for hard and soft: larger PINT2mA will get you larger value for power (mAh equivalent) */
     //#define WATTS // compute and display the actual watts (=Volt*Ampere) consumed - requires both POWERMETER_HARD and VBAT

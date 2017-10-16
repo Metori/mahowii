@@ -630,7 +630,7 @@ void run_telemetry(void)
 		int rx = SerialRead(TELEMETRY_SERIAL);
 		if (lastRx == FRSKY_START_STOP)
 		{
-			debug[1] = rx;
+			//debug[1] = rx;
 			switch (rx)
 			{
 				case FRSKY_SPORT_DEVICE_4:

@@ -189,7 +189,7 @@ void applyPIDControl(uint16_t dTime, bool isHoveringState) {
 
 	targetVario = constrain(targetVario, -MAX_VARIO, MAX_VARIO); // desired speed/vario in limit of +/-MAX_VARIO
 
-    debug[0] = targetVario;
+    //debug[0] = targetVario;
 
     int32_t varioError = targetVario - alt.estVario;
     varioError = constrain(varioError, -600, 600);

@@ -383,7 +383,7 @@ void readSerial_RX(void) {
     if(sumdIndex == sumdSize*2+5) {
       sumdIndex = 0;
       spekFrameFlags = 0x00;
-      debug[1] = sumd[1];
+      //debug[1] = sumd[1];
       if (sumdSize > SUMD_MAXCHAN) sumdSize = SUMD_MAXCHAN;
       for (uint8_t b = 0; b < sumdSize; b++)
         rcValue[b] = ((sumd[2*b+3]<<8) | sumd[2*b+4])>>3;

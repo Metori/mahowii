@@ -79,7 +79,7 @@ bool applyAltHoldControl() {
 						targetVario = constrain(targetVario, -(MAX_NAV_VARIO/3), (MAX_NAV_VARIO/3));
 					}
 				}
-		#ifdef BUZZER
+		#if defined(BUZZER) && defined(ALT_HOLD_VARIO_BUZZER)
 				beepBuzzer(targetVario);
 		#endif
 
@@ -122,7 +122,7 @@ bool applyAltHoldControl() {
 						targetVario = ((throttleDiff - ((throttleDiff > 0) ? ALT_HOLD_THROTTLE_NEUTRAL_ZONE : -ALT_HOLD_THROTTLE_NEUTRAL_ZONE)) * 3)/ 4;
 					}
 
-		#ifdef BUZZER
+		#if defined(BUZZER) && defined(ALT_HOLD_VARIO_BUZZER)
 					beepBuzzer(targetVario);
 		#endif
 
@@ -137,7 +137,7 @@ bool applyAltHoldControl() {
 						altToHold = alt.estAlt;
 		#endif
 
-		#ifdef BUZZER
+		#if defined(BUZZER) && defined(ALT_HOLD_VARIO_BUZZER)
 						stopBuzzer();
 		#endif
 					}
@@ -159,7 +159,7 @@ bool applyAltHoldControl() {
 				resetVarioErrorIPart();
 				resetLandDetector();
 
-			  #ifdef BUZZER
+			  #if defined(BUZZER) && defined(ALT_HOLD_VARIO_BUZZER)
 				stopBuzzer();
 			  #endif
 			}
@@ -299,7 +299,7 @@ bool isLanded() {
 }
 
 
-#ifdef BUZZER
+#if defined(BUZZER) && defined(ALT_HOLD_VARIO_BUZZER)
 void beepBuzzer(int16_t targetVario) {
     static uint32_t varioBuzzerTime;
     static uint8_t buzzerCount;

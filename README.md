@@ -1,3 +1,13 @@
+===================================
+Metori's QUADX config
+===================================
+Includes:
+1. VBAT Autolanding from MultiWii forum
+2. NAV failsafe from MultiWii forum
+3. VBAT fix. Using INTERNAL1V1 analog reference for VBAT analog to digital conversion.
+
+4. NAV config tuned to be faster
+5. Disabled variometer beeps in AH flight mode
 
 ===================================
 MahoWii rev 2.4 

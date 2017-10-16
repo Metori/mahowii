@@ -480,7 +480,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
   /* you may need to change PINx and PORTx plus #shift according to the desired pin! */
   #define OVERRIDE_V_BATPIN                   A0 // instead of A3    // Analog PIN 3
 
-  //#define OVERRIDE_PSENSORPIN                 A2 // instead of A2    // Analog PIN 2
+  //#define OVERRIDE_PSENSORPIN                 A1 // instead of A2    // Analog PIN 2
 
   //#define OVERRIDE_LEDPIN_PINMODE             pinMode (A1, OUTPUT); // use A1 instead of d13
   //#define OVERRIDE_LEDPIN_TOGGLE              PINC |= 1<<1; // PINB |= 1<<5;     //switch LEDPIN state (digital PIN 13)
@@ -769,9 +769,9 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 	#define SAFE_WP_DISTANCE           500      //(**)
 
 	// (EEPROM) minimum speed when approach waypoint
-	#define NAV_SPEED_MIN              200    // cm/sec //(**)
+	#define NAV_SPEED_MIN              300    // cm/sec //(**)
 	// (EEPROM) maximum speed to reach between waypoints
-	#define NAV_SPEED_MAX              600    // cm/sec //(**)
+	#define NAV_SPEED_MAX              1000    // cm/sec //(**)
 	// (EEPROM) Slow down to zero when reaching waypoint (same as NAV_SPEED_MIN = 0)
 	#define NAV_SLOW_NAV               0      //(**)
 	// (EEPROM) Weight factor of the crosstrack error in navigation calculations (do not touch)
@@ -780,9 +780,9 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 	#define NAV_BANK_MAX		   3000	// =30 degrees (**)
 
 	// (EEPROM) Maximum allowable navigation altitude (in meters) automatic altitude control will not go above this height
-	#define MAX_NAV_ALTITUDE           80     //(**)
+	#define MAX_NAV_ALTITUDE           150     //(**)
 	// (EEPROM) Defines the RTH altitude. 0 means keep current alt during RTH (in meters)
-	#define RTH_ALTITUDE               25        //(**)
+	#define RTH_ALTITUDE               30        //(**)
 	// (EEPROM) Wait to reach RTH/WP alt before start moving to home/next WP (0-no, 1-yes)
 	#define WAIT_FOR_TARGET_ALT        1         //(**)
 
@@ -922,8 +922,8 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
   /********************************************************************/
   /****                             RSSI                           ****/
   /********************************************************************/
-    #define RX_RSSI
-    #define RX_RSSI_PIN A3
+    //#define RX_RSSI
+    //#define RX_RSSI_PIN A3
     //#define RX_RSSI_CHAN 8   //RSSI injection on selected channel (for PPM, Olrs, SBUS, etc.) (Starts at 0)
 
   /********************************************************************/
@@ -1000,7 +1000,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
        Two options:
        1 - hard: - (uses hardware sensor, after configuration gives very good results)
        2 - soft: - (good results +-5% for plush and mystery ESCs @ 2S and 3S, not good with SuperSimple ESC)    */
-    #define POWERMETER_SOFT
+    //#define POWERMETER_SOFT
     //#define POWERMETER_HARD
     #define PSENSORNULL 57 /* (*) hard only: set to analogRead() value for zero current; for I=0A my sensor
                                    gives 1/2 Vss; that is approx 2.49Volt; */
@@ -1040,6 +1040,9 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
      * If it's activated, specified hovering throttle value will be taken from this define.
      */
     //#define HOVERING_THROTTLE 		1500
+
+    /* If this define enabled then buzzer beeps will be used as variometer feedback */
+    //#define ALT_HOLD_VARIO_BUZZER
 
 
   /********************************************************************/

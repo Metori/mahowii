@@ -477,7 +477,7 @@ void annexCode() { // this code is executed at each loop and won't interfere wit
       static uint16_t pvec[PSENSOR_SMOOTH], psum;
       uint16_t p =  analogRead(PSENSORPIN);
       //LCDprintInt16(p); LCDcrlf();
-      debug[1] = p;
+      //debug[1] = p;
       #if PSENSOR_SMOOTH != 1
         psum += p;
         psum -= pvec[ind];

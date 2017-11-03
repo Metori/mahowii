@@ -552,7 +552,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
    * Note: theoretically it increases D-part for 20-30% and you will need to increase acro P coef. accordingly.
    * E.g. P roll/pitch was 5.2 and should be changed to 6-6.5
    */
-  //#define KILL_SMALL_OSCILLATIONS
+  #define KILL_SMALL_OSCILLATIONS
 
   /************************        Angele throttle correction         ********************/
   /* Automatically increase throttle based on the angle of the copter
@@ -562,7 +562,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 
   /*** HEADFREE : the copter can be controled by an absolute stick orientation, whatever the yaw orientation ***/
   //#define HEADFREE
-  
+
  /*************************        Advanced Headfree Mode             ********************/
  /* In Advanced Headfree mode when the copter is farther than ADV_HEADFREE_RANGE meters then
     the  bearing between home and copter position will become the control direction
@@ -698,7 +698,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 
 	//#define UBLOX_GNSS_GPS_SBAS           // set GNSS to GPS + SBAS only
 	//#define UBLOX_GNSS_GPS_SBAS_GLONASS     // set GNSS to GPS + SBAS + GLONASS
-    
+
 	//#define UBLOX_NAV5_PEDESTRIAN_MODEL	// Collected by resetting a GPS unit to defaults. Changing mode to Pedistrian and capturing the data from the U-Center binary console.
 	//#define UBLOX_NAV5_AIRBORNE_1G_MODEL	// Airborne <1G model
 	//#define UBLOX_NAV5_AIRBORNE_4G_MODEL	// Airborne <4G model
@@ -756,7 +756,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
 
 	// add a 5 element moving average filter to GPS coordinates, helps eliminate gps noise but adds latency comment out to disable
 	// use it with NMEA gps only
-	//#define GPS_FILTERING                 
+	//#define GPS_FILTERING
 
 	// (EEPROM) if we are within this distance to a waypoint then we consider it reached (distance is in cm)
 	#define GPS_WP_RADIUS              200      //(**)
@@ -972,9 +972,9 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
     #define VBAT              // uncomment this line to activate the vbat code
     #define VBATSCALE       119 // (*) (**) change this value if readed Battery voltage is different than real voltage
     #define VBATNOMINAL     126 // 12,6V full battery nominal voltage - only used for lcd.telemetry
-    #define VBATLEVEL_WARN1 108 // (*) (**) 10,8V
-    #define VBATLEVEL_WARN2 102 // (*) (**) 10.2V
-    #define VBATLEVEL_CRIT   99 // (*) (**) 9.9V - critical condition: if vbat ever goes below this value, permanent alarm is triggered
+    #define VBATLEVEL_WARN1 107 // (*) (**) 10,7V
+    #define VBATLEVEL_WARN2 104 // (*) (**) 10.4V
+    #define VBATLEVEL_CRIT  100 // (*) (**) 10.0V - critical condition: if vbat ever goes below this value, permanent alarm is triggered
     #define NO_VBAT          16 // Avoid beeping without any battery
     #define VBAT_OFFSET       0 // offset in 0.1Volts, gets added to voltage value  - useful for zener diodes
 

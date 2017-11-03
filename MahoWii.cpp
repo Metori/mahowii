@@ -99,6 +99,7 @@ const char boxnames[] PROGMEM = // names for dynamic generation of config GUI
 #if GPS
   "MISSION;"
   "LAND;"
+  "NEXT WP;"
 #endif
 #if BARO
   "SAFE ALT;"
@@ -157,9 +158,10 @@ const uint8_t boxids[] PROGMEM = {// permanent IDs associated to boxes. This way
 #if GPS
   20, //"MISSION;"
   21, //"LAND;"
+  22, //"NEXT WP;"
 #endif
 #if BARO
-  22, //"SAFE ALT;"
+  23, //"SAFE ALT;"
 #endif
   };
 
@@ -1326,6 +1328,23 @@ void loop () {
 					//}
 			#endif
 				}
+
+                //Next waypoint box handling
+                if(f.NEXT_WP_SET && !rcOptions[BOXWPNEXT]) {
+                    f.NEXT_WP_SET = false;
+                }
+
+                if(f.GPS_mode == GPS_MODE_NAV) {
+                    if(rcOptions[BOXWPNEXT] && !f.NEXT_WP_SET) {
+                        if(mission_step.flag == MISSION_FLAG_END) { //If current wp is last then switch to first wp
+                            next_step = 1;
+                        }
+
+                        NAV_state = NAV_STATE_PROCESS_NEXT;
+                        f.NEXT_WP_SET = true;
+                    }
+                }
+
 				//Generate a packed byte of all four GPS boxes.
 				uint8_t gps_modes_check = (rcOptions[BOXLAND] << 3) + (rcOptions[BOXGPSHOME] << 2)
 										+ (rcOptions[BOXGPSHOLD] << 1) + (rcOptions[BOXGPSNAV]);

@@ -82,6 +82,7 @@ enum box {
   #if GPS
     BOXGPSNAV,
     BOXLAND,
+    BOXWPNEXT,
   #endif
   #if BARO
     BOXSAFEALT,
@@ -169,6 +170,7 @@ typedef struct {
   uint8_t GPS_head_set: 1;           // it is 1 if the navigation engine got commands to control heading (SET_POI or SET_HEAD) CLEAR_HEAD will zero it
   uint8_t LAND_COMPLETED: 1;
   uint8_t LAND_IN_PROGRESS: 1;
+  uint8_t NEXT_WP_SET: 1;            // This flag means that NAV switched to next wp already. Flag will be cleared after user will switch BOXWPNEXT off.
 #endif
 #if defined(VBAT) && defined(VBAT_ALAND)
   uint8_t VBAT_AUTOLAND : 1;
